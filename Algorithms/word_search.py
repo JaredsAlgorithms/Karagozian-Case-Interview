@@ -63,9 +63,6 @@ class GenericSolution:
 
         self.visited[i][j] = True
 
-        # i < 0 <= self.ROW
-
-        # for x, y in zip(DX, DY):
         for x, y in movements:
             if self.backtrack(i + x, j + y, word, position + 1):
                 self.path.append((i, j))
