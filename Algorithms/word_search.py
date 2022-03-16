@@ -50,7 +50,6 @@ class GenericSolution:
         if position == len(word):
             return True
 
-
         if (
             i not in range(0, self.ROW)
             # not i < 0 <= self.ROW
@@ -67,7 +66,6 @@ class GenericSolution:
             if self.backtrack(i + x, j + y, word, position + 1):
                 self.path.append((i, j))
                 return True
-
 
         return False
 
