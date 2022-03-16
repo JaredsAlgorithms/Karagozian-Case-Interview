@@ -3,11 +3,7 @@
 import typing
 import pathlib
 
-# Cardinal direction movements
-
-DX, DY = ((0, 1, 0, -1), (1, 0, -1, 0))
-
-# Combined
+# Directions we can move
 
 movements = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
@@ -29,6 +25,23 @@ class GenericSolution:
             content[4],
             content[6:],
         )
+        self._cached_x_domain, self._cached_y_domain = map(
+            list, (range(0, self.ROW), range(0, self.COL))
+        )
+
+    def out_of_bounds(self, i: int, j: int) -> bool:
+        """
+        Check if the current pair of indicies are in the confines of the matrix
+
+            Parameters:
+                i (int): horizontal position in the matrix
+                j (int): vertical position in the matrix
+            Returns:
+                inside (bool): True if it is inside, False otherwise
+        """
+
+        return i not in self._cached_x_domain or j not in self._cached_y_domain
+
 
 class NoWrapSolution(GenericSolution):
     """Implementation of no wrapping solution"""
@@ -47,16 +60,21 @@ class NoWrapSolution(GenericSolution):
         - Horizontal direction under/over flows the grid
         - Vertical direction under/over flows the grid
         - Current grid element does not match the current position in the word
+
+            Parameters:
+                i (int): horizontal position in the matrix
+                j (int): vertical position in the matrix
+                word (str): current word we are searching for
+                position (int): position inside the string we are searching for
+            Returns:
+                exist (bool): conditional return depending on which edge case we're dealig with
         """
 
         if position == len(word):
             return True
 
         if (
-            i not in range(0, self.ROW)
-            # not i < 0 <= self.ROW
-            or j not in range(0, self.COL)
-            # or j < 0 <= self.COL
+            self.out_of_bounds(i, j)
             or self.letters[i][j] != word[position]
         ):
             return False
@@ -79,10 +97,6 @@ class NoWrapSolution(GenericSolution):
         """
 
         movements.extend(extension)
-
-        # movements.extend(
-        # [(0, len(word)), (len(word), 0), (0, -1 * len(word)), (-1 * len(word), 0)]
-        # )
 
         if len(word) > len(self.letters[0]):
             # Word is too long, no point invoking the algorithm
