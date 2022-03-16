@@ -3,7 +3,7 @@
 import unittest
 import pathlib
 
-from Algorithms.word_search import GenericSolution
+from Algorithms.word_search import NoWrapSolution
 
 
 class NoWrapTest(unittest.TestCase):
@@ -14,7 +14,7 @@ class NoWrapTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.solution = GenericSolution(pathlib.Path("inputs/word_search_01.txt"))
+        cls.solution = NoWrapSolution(pathlib.Path("inputs/word_search_01.txt"))
 
     def test_search_word_found(self):
         """The word should be present"""

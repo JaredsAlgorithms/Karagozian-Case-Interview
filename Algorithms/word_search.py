@@ -31,6 +31,9 @@ class GenericSolution:
         )
         self.visited = [[False] * self.ROW] * self.COL
 
+class NoWrapSolution(GenericSolution):
+    """Implementation of no wrapping solution"""
+
     def backtrack(
         self,
         i: int,
