@@ -29,12 +29,11 @@ class GenericSolution:
             content[4],
             content[6:],
         )
-        self.visited = [[False] * self.ROW] * self.COL
 
 class NoWrapSolution(GenericSolution):
     """Implementation of no wrapping solution"""
 
-    def backtrack(
+    def depth_first_search(
         self,
         i: int,
         j: int,
@@ -59,14 +58,11 @@ class NoWrapSolution(GenericSolution):
             or j not in range(0, self.COL)
             # or j < 0 <= self.COL
             or self.letters[i][j] != word[position]
-            or self.visited[i][j]
         ):
             return False
 
-        self.visited[i][j] = True
-
         for x, y in movements:
-            if self.backtrack(i + x, j + y, word, position + 1):
+            if self.depth_first_search(i + x, j + y, word, position + 1):
                 self.path.append((i, j))
                 return True
 
@@ -94,6 +90,6 @@ class NoWrapSolution(GenericSolution):
 
         for i in range(0, self.ROW):
             for j in range(0, self.COL):
-                if self.backtrack(i, j, word, 0):
+                if self.depth_first_search(i, j, word, 0):
                     return True
         return False
