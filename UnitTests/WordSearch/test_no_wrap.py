@@ -14,20 +14,27 @@ class NoWrapTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.solution = NoWrapSolution(pathlib.Path("inputs/word_search_01.txt"))
+        cls.solution_a = NoWrapSolution(pathlib.Path("inputs/word_search_01.txt"))
+        cls.solution_b = NoWrapSolution(pathlib.Path("inputs/word_search_02.txt"))
+
+    def test_mode(self):
+        """Make sure we are operating in the correct mode"""
+        self.assertTrue(
+            self.solution_a.mode == "NO_WRAP"
+        )
 
     def test_search_word_found(self):
-        """The word should be present"""
+        """The word should be present: FIRST INPUT"""
 
-        self.assertTrue(self.solution.exist("FED", []))
+        self.assertTrue(self.solution_a.exist("FED", []))
 
-        self.assertTrue(self.solution.path == [(1, 0), (1, 1), (1, 2)])
+        self.assertTrue(self.solution_a.path == [(1, 2), (1, 1), (1, 0)])
 
-        self.solution.path.clear()
+        self.solution_a.path.clear()
 
     def test_search_word_not_found(self):
-        """These words should not be present"""
+        """These words should not be present: FIRST INPUT"""
 
         self.assertTrue(
-            not any(map(lambda x: self.solution.exist(x, []), self.solution.words[1:]))
+            not any(map(lambda x: self.solution_a.exist(x, []), self.solution_a.words[1:]))
         )

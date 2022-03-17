@@ -1,0 +1,7 @@
+{
+		"dimensions": [4, 3],
+		"board": "ABC|DEF|GHI|JKL",
+		"mode": "WRAP",
+		"word_count": 5,
+		"words": ["FED", "CAB", "AEIJBFG", "LGEC", "HIGH"]
+}

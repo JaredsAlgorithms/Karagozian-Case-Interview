@@ -17,14 +17,16 @@ class GenericSolution:
         with open(input_, "r", encoding="utf-8") as fil_ptr:
             content = [x.strip() for x in fil_ptr.readlines()]
 
-        (self.ROW, self.COL), self.letters, self.mode, self.words = (
-            list(
-                map(int, content[0].split(" "))
-            ),  # get the dimensions and convert them into integers
-            list(map(list, content[1:4])),  # get all the characters into a grid
-            content[4],
-            content[6:],
+        # Get the dimensions and convert them into integers
+
+        self.ROW, self.COL = map(int, content[0].split(" "))
+
+        self.letters, self.mode, self.words = (
+            list(map(list, content[1:self.COL+1])),  # get all the characters into a grid
+            content[self.COL+1],
+            content[self.COL+3:],
         )
+
         self._cached_x_domain, self._cached_y_domain = map(
             list, (range(0, self.ROW), range(0, self.COL))
         )
@@ -81,7 +83,8 @@ class NoWrapSolution(GenericSolution):
 
         for x, y in movements:
             if self.depth_first_search(i + x, j + y, word, position + 1):
-                self.path.append((i, j))
+                self.path.insert(0, (i, j))
+                # self.path.append((i, j))
                 return True
 
         return False
@@ -100,10 +103,13 @@ class NoWrapSolution(GenericSolution):
 
         if len(word) > len(self.letters[0]):
             # Word is too long, no point invoking the algorithm
+            print(f"[NOT FOUND]: {word}")
             return False
 
         for i in range(0, self.ROW):
             for j in range(0, self.COL):
                 if self.depth_first_search(i, j, word, 0):
+                    print(f"[FOUND]: {word} => {self.path[0]} {self.path[-1]}")
                     return True
+        print(f"[NOT FOUND]: {word}")
         return False

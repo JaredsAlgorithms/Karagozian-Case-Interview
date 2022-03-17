@@ -1,0 +1,7 @@
+{
+		"dimensions": [3, 3],
+		"board": "ABC|DEF|GHI",
+		"mode": "NO_WRAP",
+		"word_count": 5,
+		"words": ["FED", "CAB", "GAD", "BID", "HIGH"]
+}
