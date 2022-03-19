@@ -10,4 +10,13 @@ The original code can be found [here](https://github.com/CSUF-Tuffix/Tuffix-2).
 
 ## External Dependencies
 
-This requires `termcolor` for colored output
+This requires `termcolor` for colored output.
+Please run the following to get the system up and running:
+
+```bash
+python -m venv dependencies
+source dependencies/bin/activate
+pip install -r requirements.txt
+python runner.py --all
+deactivate
+```
