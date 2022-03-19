@@ -19,9 +19,7 @@ class NoWrapTest(unittest.TestCase):
 
     def test_mode(self):
         """Make sure we are operating in the correct mode"""
-        self.assertTrue(
-            self.solution_a.mode == "NO_WRAP"
-        )
+        self.assertTrue(self.solution_a.mode == "NO_WRAP")
 
     def test_search_word_found(self):
         """The word should be present: FIRST INPUT"""
@@ -36,5 +34,7 @@ class NoWrapTest(unittest.TestCase):
         """These words should not be present: FIRST INPUT"""
 
         self.assertTrue(
-            not any(map(lambda x: self.solution_a.exist(x, []), self.solution_a.words[1:]))
+            not any(
+                map(lambda x: self.solution_a.exist(x, []), self.solution_a.words[1:])
+            )
         )

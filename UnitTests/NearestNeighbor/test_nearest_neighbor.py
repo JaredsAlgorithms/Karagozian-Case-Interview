@@ -25,7 +25,7 @@ class NearestNeighborTest(unittest.TestCase):
             [2, 3, 7, 8],
             [1, 3, 7, 8],
             [4, 5, 6, 8],
-            list(range(0, 8))
+            list(range(0, 8)),
         ]
 
     def test_premade_solutions(self):

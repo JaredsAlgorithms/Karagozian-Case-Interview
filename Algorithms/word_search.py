@@ -22,9 +22,11 @@ class GenericSolution:
         self.ROW, self.COL = map(int, content[0].split(" "))
 
         self.letters, self.mode, self.words = (
-            list(map(list, content[1:self.COL+1])),  # get all the characters into a grid
-            content[self.COL+1],
-            content[self.COL+3:],
+            list(
+                map(list, content[1 : self.COL + 1])
+            ),  # get all the characters into a grid
+            content[self.COL + 1],
+            content[self.COL + 3 :],
         )
 
         self._cached_x_domain, self._cached_y_domain = map(
@@ -75,10 +77,7 @@ class NoWrapSolution(GenericSolution):
         if position == len(word):
             return True
 
-        if (
-            self.out_of_bounds(i, j)
-            or self.letters[i][j] != word[position]
-        ):
+        if self.out_of_bounds(i, j) or self.letters[i][j] != word[position]:
             return False
 
         for x, y in movements:
