@@ -4,6 +4,8 @@ import ast
 import typing
 import pathlib
 import math
+import functools
+import operator
 
 
 class GenericSolution:
@@ -16,6 +18,26 @@ class GenericSolution:
         self.radius = float(content[0])
         self.N = int(content[1])
         self.points = list(map(ast.literal_eval, content[2 : 2 + self.N]))
+
+    @staticmethod
+    def _dist(src: typing.Iterable, dst: typing.Iterable) -> typing.Union[int, float]:
+        """
+        Implementation of `math.dist` using an array programming approach
+
+            Parameters:
+                src (typing.Iterable): source position that contains a Eucilidean point
+                dst (typing.Iterable): destination position that contains a Eucilidean point
+            Returns:
+                distance (typing.Union[int, float]): the resulting distance in Eucilidean space
+        """
+        return math.sqrt(
+            sum(
+                map(
+                    lambda x: math.pow(functools.reduce(operator.sub, x), 2),
+                    zip(src, dst),
+                ),
+            )
+        )
 
     def solve(self, solutions: typing.List[typing.List[int]]) -> None:
         """
@@ -33,22 +55,13 @@ class GenericSolution:
 
         assert len(solutions) == self.N
 
-        for solution, (i, point) in zip(solutions, enumerate(self.points)):
-            # NOTE: this uses (0, radius] for what is acceptable
-            # Constraints stated: (0, radius), however none of the values line up properly
-
-            # O(n - k), where 
-
+        for solution, (j, point) in zip(solutions, enumerate(self.points)):
             found = [
                 i
                 for i, neighbor in enumerate(self.points)
                 if 0 < math.dist(point, neighbor) <= self.radius
             ]
 
-            # this is dumb because I need to print it with join, takes up O(n) space
-            # we could play code golf and turn all the solution lists into lists of strings
-            # but I don't feel like doing that
-
-            print(f'{i}: {", ".join(map(str, found))}')
+            print(f'{j}: {", ".join(map(str, found))}')
 
             assert solution == found
