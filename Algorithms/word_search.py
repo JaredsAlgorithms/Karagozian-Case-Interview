@@ -7,7 +7,7 @@ import types
 
 # Directions we can move
 
-movements = [(-1, -1), (-1, 0), (-1, 1), (0, -1) ,(0, 1), (1, -1), (1, 0), (1, 1)]
+movements = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 # movements = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
 
@@ -22,16 +22,9 @@ class GenericSolution:
 
         self.COL, self.ROW = map(int, next(contents).split(" "))
         self.letters = list(itertools.islice(contents, self.COL))
-        # self.letters = map(list, itertools.islice(contents, self.COL))
-        print(self.letters)
         self.mode = next(contents)
         self.N = int(next(contents))
         self.words = list(itertools.islice(contents, self.N))
-
-        self._cached_x_domain, self._cached_y_domain = map(
-            list, (range(0, self.ROW), range(0, self.COL))
-        )
-
 
     def out_of_bounds(self, i: int, j: int) -> bool:
         """
@@ -44,14 +37,15 @@ class GenericSolution:
                 inside (bool): True if it is inside, False otherwise
         """
 
-        return (
-            i < 0
-            or i >= self.ROW
-            or j < 0
-            or j >= self.COL
+        return not (
+            0 <= i <= self.ROW
+            and 0 <= j <=  self.COL
         )
 
+        # return i < 0 or i >= self.ROW-1 or j < 0 or j >= self.COL-1
+
         # return i not in self._cached_x_domain or j not in self._cached_y_domain
+
 
 class NoWrapSolution(GenericSolution):
     """Implementation of no wrapping solution"""
@@ -119,16 +113,15 @@ class NoWrapSolution(GenericSolution):
         print(f"[NOT FOUND]: {word}")
         return False
 
-class WrappingSolution(GenericSolution):
 
+class WrappingSolution(GenericSolution):
     def depth_first_search(
         self,
         i: int,
         j: int,
-        word: str,
-        position: int,
+        letter: str
     ) -> bool:
-        print(f'i: {i}, j: {j}, position: {position}')
+
         """
         Search the grid recursively until we hit a condition where we
         cannot continue processing
@@ -146,27 +139,22 @@ class WrappingSolution(GenericSolution):
                 exist (bool): conditional return depending on which edge case we're dealig with
         """
 
-        if position == len(word):
-            # print(position == word[position])
-            print(i, j)
-            return True
-
-        if not (char := self.get(i, j, position, word)):
+        if i >= self.ROW-1 or j >= self.COL-1 or i < 0 or j < 0:
             return False
-        print(char)
-        # if not self.get(i, j):
-            # return False
 
-        for x, y in movements:
-            if self.depth_first_search(i + x, j + y, word, position + 1):
-                self.path.insert(0, (i, j))
-                # self.path.append((i, j))
+        if self.letters[i][j] == letter:
+            node = (self.letters[i][j], i, j)
+            if node not in self.path:
+                self.path.append(node)
                 return True
+            else:
+                print(f"NODE {node} is in the path!!!!")
+                return False
 
+        # for x, y in movements:
+            # if self.depth_first_search(i + x, j + y, letter):
+                # return True
         return False
-
-    def get(self, i: int, j: int, position: int, word: str) -> bool:
-        return types.NoneType if self.out_of_bounds(i, j) else self.letters[i][j] != word[position]
 
     def exist(self, word: str, extension: typing.List[typing.Tuple[int, int]]):
         """
@@ -177,11 +165,13 @@ class WrappingSolution(GenericSolution):
             Returns:
                 presence (bool): is in the word search
         """
-        for i in range(0, self.ROW):
-            for j in range(0, self.COL):
-                if self.depth_first_search(i, j, word, 0):
-                    # print(f"[FOUND]: {word} => {self.path[0]} {self.path[-1]}")
-                    print(f"[FOUND]: {word} => {self.path}")
-                    return True
-        print(f"[NOT FOUND]: {word}")
-        return False
+
+        for w in word:
+            for i in range(0, self.ROW):
+                for j in range(0, self.COL):
+                    self.depth_first_search(i, j, w)
+        if not self.path:
+            print(f"[NOT FOUND]: {word}")
+            return False
+        print(f"[FOUND]: {word} => {self.path}")
+        return True
