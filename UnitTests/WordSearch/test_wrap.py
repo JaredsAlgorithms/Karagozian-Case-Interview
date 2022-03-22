@@ -3,7 +3,7 @@
 import unittest
 import pathlib
 
-from Algorithms.word_search import NoWrapSolution
+from Algorithms.word_search import WrappingSolution
 
 
 class WrapTest(unittest.TestCase):
@@ -14,7 +14,7 @@ class WrapTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.solution = NoWrapSolution(pathlib.Path("inputs/word_search_02.txt"))
+        cls.solution = WrappingSolution(pathlib.Path("inputs/word_search_02.txt"))
 
     def test_mode(self):
         self.assertTrue(self.solution.mode == "WRAP")
@@ -22,6 +22,7 @@ class WrapTest(unittest.TestCase):
     def test_words(self):
         """Place holder"""
         for word in self.solution.words:
+            print(f"[INFO] Checking word: {word}")
             self.solution.exist(word, [])
             # print(self.solution.path)
             self.solution.path.clear()
