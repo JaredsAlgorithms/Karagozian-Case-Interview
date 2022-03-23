@@ -37,14 +37,8 @@ class GenericSolution:
                 inside (bool): True if it is inside, False otherwise
         """
 
-        return not (
-            0 <= i <= self.ROW
-            and 0 <= j <=  self.COL
-        )
-
+        return not (0 <= i <= self.ROW and 0 <= j <= self.COL)
         # return i < 0 or i >= self.ROW-1 or j < 0 or j >= self.COL-1
-
-        # return i not in self._cached_x_domain or j not in self._cached_y_domain
 
 
 class NoWrapSolution(GenericSolution):
@@ -77,13 +71,19 @@ class NoWrapSolution(GenericSolution):
         if position == len(word):
             return True
 
-        if self.out_of_bounds(i, j) or self.letters[i][j] != word[position]:
+        if (
+            i < 0
+            or i >= self.ROW
+            or j < 0
+            or j >= self.COL
+            or self.letters[i][j] != word[position]
+        ):
+
             return False
 
         for x, y in movements:
             if self.depth_first_search(i + x, j + y, word, position + 1):
                 self.path.insert(0, (i, j))
-                # self.path.append((i, j))
                 return True
 
         return False
@@ -115,12 +115,7 @@ class NoWrapSolution(GenericSolution):
 
 
 class WrappingSolution(GenericSolution):
-    def depth_first_search(
-        self,
-        i: int,
-        j: int,
-        letter: str
-    ) -> bool:
+    def depth_first_search(self, i: int, j: int, letter: str) -> bool:
 
         """
         Search the grid recursively until we hit a condition where we
@@ -133,13 +128,12 @@ class WrappingSolution(GenericSolution):
             Parameters:
                 i (int): horizontal position in the matrix
                 j (int): vertical position in the matrix
-                word (str): current word we are searching for
-                position (int): position inside the string we are searching for
+                letter (str): letter in the word we're trying to find
             Returns:
                 exist (bool): conditional return depending on which edge case we're dealig with
         """
 
-        if i >= self.ROW-1 or j >= self.COL-1 or i < 0 or j < 0:
+        if i >= self.ROW - 1 or j >= self.COL - 1 or i < 0 or j < 0:
             return False
 
         if self.letters[i][j] == letter:
@@ -151,9 +145,6 @@ class WrappingSolution(GenericSolution):
                 print(f"NODE {node} is in the path!!!!")
                 return False
 
-        # for x, y in movements:
-            # if self.depth_first_search(i + x, j + y, letter):
-                # return True
         return False
 
     def exist(self, word: str, extension: typing.List[typing.Tuple[int, int]]):
@@ -165,6 +156,7 @@ class WrappingSolution(GenericSolution):
             Returns:
                 presence (bool): is in the word search
         """
+        # This is brute force to just find each letter in the word
 
         for w in word:
             for i in range(0, self.ROW):

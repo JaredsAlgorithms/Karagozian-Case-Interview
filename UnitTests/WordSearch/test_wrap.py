@@ -20,7 +20,9 @@ class WrapTest(unittest.TestCase):
         self.assertTrue(self.solution.mode == "WRAP")
 
     def test_words(self):
-        """Place holder"""
+        """Find the words"""
+        print("[WARN] These answers are incomplete, test passes because no errors occur")
+
         for word in self.solution.words:
             print(f"[INFO] Checking word: {word}")
             self.solution.exist(word, [])
